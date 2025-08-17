@@ -1,14 +1,14 @@
-name: cunter2
-description: A new Flutter project.
-publish_to: 'none'
-version: 0.1.0
+name: contador_mvvm
+description: Un contador simple en Flutter con MVVM
+publish_to: "none"
 
 environment:
-  sdk: '>=2.19.3 <3.0.0'
+  sdk: ">=2.19.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
