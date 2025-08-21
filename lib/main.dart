@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/counter_viewmodel.dart';
-import 'views/counter_view.dart';
+import 'viewmodels/counter_viewmodelmotos.dart';
+import 'views/screens/main_screen.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => CounterViewModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => MotorsViewModel()),
+        ChangeNotifierProvider(create: (_) => UsersViewModel()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -19,9 +23,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MVVM Flutter',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const CounterView(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          secondary: Colors.orange,
+          tertiary: Colors.teal,
+        ),
+      ),
+      home: const MainScreen(),
     );
   }
 }

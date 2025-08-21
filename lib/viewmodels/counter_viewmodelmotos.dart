@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UsersViewModel with ChangeNotifier {
+class MotorsViewModel with ChangeNotifier {
   int _count = 0;
 
   int get count => _count;

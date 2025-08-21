@@ -1,55 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/counter_viewmodel.dart';
+import '../viewmodels/counter_viewmodelmotos.dart';
 
 class CounterView extends StatelessWidget {
   const CounterView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final counterVM = Provider.of<CounterViewModel>(context);
+    final motorsViewModel = Provider.of<MotorsViewModel>(context);
+    final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Contador MVVM"),
-        centerTitle: true,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [colors.primaryContainer, colors.primary.withOpacity(0.3)],
+        ),
       ),
-      body: Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Valor actual del contador:",
-                style: TextStyle(fontSize: 20)),
-            Text(
-              "${counterVM.count}",
-              style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            const Icon(Icons.motorcycle, size: 60, color: Colors.deepOrange),
+            const SizedBox(height: 10),
+            const Text(
+              'CONTADOR DE MOTOS',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
             ),
             const SizedBox(height: 30),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: colors.primary,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: colors.primary.withOpacity(0.5),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Text(
+                '${motorsViewModel.count}',
+                style: const TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: counterVM.increment,
-                  child: const Text("Incrementar"),
+                _buildActionButton(
+                  icon: Icons.remove,
+                  color: colors.error,
+                  onPressed: motorsViewModel.decrement,
                 ),
-                const SizedBox(width: 15),
-                ElevatedButton(
-                  onPressed: counterVM.decrement,
-                  child: const Text("Decrementar"),
+                const SizedBox(width: 20),
+                _buildActionButton(
+                  icon: Icons.refresh,
+                  color: colors.secondary,
+                  onPressed: motorsViewModel.reset,
+                  isReset: true,
                 ),
-                const SizedBox(width: 15),
-                ElevatedButton(
-                  onPressed: counterVM.reset,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // 👈 Botón de reinicio en rojo
-                  ),
-                  child: const Text("Reiniciar"),
+                const SizedBox(width: 20),
+                _buildActionButton(
+                  icon: Icons.add,
+                  color: colors.primary,
+                  onPressed: motorsViewModel.increment,
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              _getMotorcycleMessage(motorsViewModel.count),
+              style: TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: colors.onBackground.withOpacity(0.7),
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onPressed,
+    bool isReset = false,
+  }) {
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.5),
+            blurRadius: 5,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  String _getMotorcycleMessage(int count) {
+    if (count == 0) {
+      return 'No hay motos en el taller';
+    } else if (count == 1) {
+      return '¡1 moto lista para entrega!';
+    } else if (count < 5) {
+      return '$count motos en reparación';
+    } else {
+      return '¡Taller a máxima capacidad! $count motos';
+    }
   }
 }
